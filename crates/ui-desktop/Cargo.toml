@@ -1,0 +1,262 @@
+[package]
+name = "ui-desktop"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Desktop GUI for bio-p2p network using Tauri and egui"
+keywords = ["gui", "desktop", "tauri", "egui"]
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+core-protocol = { path = "../core-protocol" }
+p2p-node = { path = "../p2p-node" }
+security = { path = "../security" }
+resource-mgr = { path = "../resource-mgr" }
+tauri.workspace = true
+egui.workspace = true
+eframe.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+anyhow.workspace = true
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[lints]
+workspace = true
+[package]
+name = "bio-p2p-ui-desktop"
+version = "0.1.0"
+description = "Bio P2P Desktop Application - Biological Peer-to-Peer Network Interface"
+authors = ["Bio P2P Contributors <maintainers@bio-p2p.org>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/bio-p2p/bio-p2p"
+homepage = "https://bio-p2p.org"
+documentation = "https://docs.bio-p2p.org"
+keywords = ["p2p", "biological", "distributed", "networking", "desktop"]
+categories = ["network-programming", "gui"]
+edition = "2021"
+rust-version = "1.70"
+
+[dependencies]
+# Tauri for cross-platform desktop application framework
+tauri = { version = "1.5", features = [
+    "api-all",
+    "system-tray",
+    "notification-all",
+    "window-all",
+    "fs-all",
+    "shell-open",
+    "updater"
+] }
+
+# egui for immediate mode GUI
+eframe = { version = "0.24", features = ["persistence", "default_fonts"] }
+egui = "0.24"
+egui_extras = { version = "0.24", features = ["image", "svg"] }
+
+# Async runtime and utilities
+tokio = { version = "1.35", features = ["full"] }
+tokio-util = { version = "0.7", features = ["full"] }
+futures = "0.3"
+
+# Serialization and data handling
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# Error handling and logging
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+
+# Time and date handling
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.6", features = ["v4", "serde"] }
+
+# System integration
+directories = "5.0"
+sysinfo = "0.29"
+
+# Bio P2P core components
+bio-p2p-core = { path = "../bio-p2p-core", version = "0.1.0" }
+bio-p2p-p2p = { path = "../bio-p2p-p2p", version = "0.1.0" }
+bio-p2p-security = { path = "../bio-p2p-security", version = "0.1.0" }
+bio-p2p-resource = { path = "../bio-p2p-resource", version = "0.1.0" }
+
+# Network and P2P functionality  
+libp2p = { version = "0.53", features = [
+    "tcp",
+    "noise",
+    "yamux", 
+    "gossipsub",
+    "mdns",
+    "kad",
+    "identify",
+    "ping",
+    "relay",
+    "dcutr",
+    "autonat",
+    "upnp",
+    "metrics",
+    "tokio"
+] }
+
+# Cryptography
+ed25519-dalek = "2.0"
+sha3 = "0.10"
+rand = "0.8"
+
+# Image handling for icons and charts
+image = { version = "0.24", features = ["png", "jpeg", "ico"] }
+resvg = "0.37"
+
+# Configuration and preferences
+config = "0.13"
+
+# Chart and visualization support
+plotters = { version = "0.3", features = ["all_series", "all_elements"] }
+plotters-backend = "0.3"
+
+# Platform-specific dependencies
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = "1.1"
+gtk = "0.16"
+libappindicator = "0.7"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.24"
+objc = "0.2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = { version = "0.3", features = ["winuser", "shellapi", "commctrl"] }
+windows = { version = "0.48", features = ["Win32_Foundation", "Win32_System_Threading", "Win32_UI_Shell"] }
+
+[dev-dependencies]
+tempfile = "3.8"
+tokio-test = "0.4"
+mockall = "0.12"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+vergen = { version = "8.2", features = ["build", "git", "gitcl"] }
+
+[features]
+default = ["native-tls"]
+native-tls = ["libp2p/tcp-tokio"]
+rustls = ["libp2p/tcp-tokio"]
+
+# Custom icons and assets
+custom-protocol = ["tauri/custom-protocol"]
+
+# Development features
+dev = ["tauri/dev"]
+bundle = ["tauri/bundle"]
+
+# Performance profiling
+profile = ["tokio/tracing"]
+
+# Biological simulation features
+advanced-bio-sim = []
+thermal-monitoring = []
+swarm-visualization = []
+
+[profile.dev]
+opt-level = 1
+debug = true
+overflow-checks = true
+
+[profile.release]
+opt-level = 3
+debug = false
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+overflow-checks = false
+
+# Faster builds for development
+[profile.dev.package."*"]
+opt-level = 2
+debug = false
+
+# Size-optimized release for distribution
+[profile.release-small]
+inherits = "release"
+opt-level = "z"
+strip = true
+lto = true
+codegen-units = 1
+
+# Debug build with optimizations for testing
+[profile.test]
+inherits = "dev"
+opt-level = 2
+
+# Metadata for application packaging
+[package.metadata.tauri]
+bundle-identifier = "org.bio-p2p.desktop"
+category = "Network"
+short-description = "Biological P2P Network Node"
+long-description = """
+A revolutionary distributed computing platform that harnesses biological principles 
+for peer-to-peer networking. Features 80+ specialized biological node types inspired 
+by natural systems, comprehensive security through immune system mechanisms, and 
+adaptive resource management for efficient distributed computing.
+"""
+
+[package.metadata.generate-rpm]
+assets = [
+    { source = "target/release/bio-p2p-ui-desktop", dest = "/usr/bin/bio-p2p-desktop", mode = "755" },
+    { source = "assets/bio-p2p-desktop.desktop", dest = "/usr/share/applications/", mode = "644" },
+    { source = "assets/icons/icon-256.png", dest = "/usr/share/pixmaps/bio-p2p-desktop.png", mode = "644" },
+]
+
+[package.metadata.deb]
+maintainer = "Bio P2P Contributors <maintainers@bio-p2p.org>"
+copyright = "2025, Bio P2P Contributors"
+license-file = ["LICENSE-MIT", "4"]
+extended-description = """
+Bio P2P Desktop provides an intuitive interface for participating in 
+the biological peer-to-peer network. Monitor network health, configure 
+biological roles, manage resources, and visualize network topology 
+through an elegant desktop application.
+"""
+depends = "libgtk-3-0, libwebkit2gtk-4.0-37, libappindicator3-1"
+section = "net"
+priority = "optional"
+assets = [
+    ["target/release/bio-p2p-ui-desktop", "usr/bin/", "755"],
+    ["assets/bio-p2p-desktop.desktop", "usr/share/applications/", "644"],
+    ["assets/icons/icon-256.png", "usr/share/pixmaps/bio-p2p-desktop.png", "644"],
+    ["README.md", "usr/share/doc/bio-p2p-desktop/README", "644"],
+]
+
+# Windows-specific metadata
+[package.metadata.wix]
+banner-path = "assets/windows/banner.png"
+dialog-image-path = "assets/windows/dialog.png"
+license = "assets/windows/license.rtf"
+product-icon = "assets/icons/icon.ico"
+upgrade-guid = "B8F8F8C8-8F8C-8F8C-8F8C-8F8C8F8C8F8C"
+
+[[bin]]
+name = "bio-p2p-desktop"
+path = "src/main.rs"
+
+[[example]]
+name = "minimal_ui"
+path = "examples/minimal_ui.rs"
+
+[[example]] 
+name = "node_integration"
+path = "examples/node_integration.rs"

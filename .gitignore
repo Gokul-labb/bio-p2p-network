@@ -1,0 +1,51 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build artifacts
+/dist/
+/build/
+
+# Security sensitive files
+*.pem
+*.key
+*.crt
+secrets/
+.env
+.env.local
+
+# Coverage reports
+lcov.info
+coverage/
+tarpaulin-report.html
+
+# Benchmark results
+/target/criterion/
+
+# Tauri
+src-tauri/target/
+.tauri/

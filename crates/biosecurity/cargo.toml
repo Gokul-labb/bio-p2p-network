@@ -1,0 +1,165 @@
+[package]
+name = "bio-security"
+version = "0.1.0"
+edition = "2021"
+description = "Biological P2P Security Framework - 5-tier biological security inspired by immune systems"
+authors = ["Bio-P2P Development Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/bio-p2p/bio-p2p"
+keywords = ["security", "biological", "p2p", "distributed", "immune-system"]
+categories = ["cryptography", "network-programming", "security"]
+
+[features]
+default = ["ml-detection", "advanced-monitoring"]
+
+# Machine learning based anomaly detection
+ml-detection = ["candle-core", "candle-nn"]
+
+# Advanced system monitoring
+advanced-monitoring = ["procfs"]
+
+# All features for comprehensive testing
+all-features = ["ml-detection", "advanced-monitoring"]
+
+[dependencies]
+# Async runtime and utilities
+tokio = { version = "1.40", features = ["full"] }
+futures = "0.3"
+async-trait = "0.1"
+
+# Cryptography
+ring = "0.17"
+zeroize = { version = "1.8", features = ["zeroize_derive"] }
+rand = "0.8"
+
+# Serialization and configuration
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+
+# System monitoring
+sysinfo = "0.32"
+procfs = { version = "0.16", optional = true }
+
+# Memory mapping for secure deletion
+memmap2 = "0.9"
+
+# Statistics and mathematical operations
+statrs = "0.17"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Time and date handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# Machine learning (optional)
+candle-core = { version = "0.8", optional = true }
+candle-nn = { version = "0.8", optional = true }
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+[dev-dependencies]
+# Testing utilities
+tokio-test = "0.4"
+tempfile = "3.13"
+criterion = { version = "0.5", features = ["html_reports"] }
+
+# Property-based testing
+proptest = "1.0"
+proptest-derive = "0.4"
+
+# Mock objects for testing
+mockall = "0.13"
+
+[lib]
+name = "bio_security"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "bio-security-cli"
+path = "src/bin/cli.rs"
+required-features = ["all-features"]
+
+[[example]]
+name = "basic_usage"
+path = "examples/basic_usage.rs"
+
+[[example]]
+name = "advanced_config"
+path = "examples/advanced_config.rs"
+
+[[example]]
+name = "security_audit"
+path = "examples/security_audit.rs"
+required-features = ["all-features"]
+
+[[bench]]
+name = "framework_performance"
+harness = false
+required-features = ["all-features"]
+
+[[bench]]
+name = "crypto_performance"
+harness = false
+
+[[bench]]
+name = "layer_performance"
+harness = false
+
+[profile.dev]
+opt-level = 0
+debug = true
+split-debuginfo = "unpacked"
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+rpath = false
+
+[profile.release]
+opt-level = 3
+debug = false
+split-debuginfo = "off"
+debug-assertions = false
+overflow-checks = false
+lto = "fat"
+panic = "abort"
+incremental = false
+codegen-units = 1
+rpath = false
+
+[profile.test]
+opt-level = 1
+debug = 2
+debug-assertions = true
+overflow-checks = true
+incremental = true
+
+[profile.bench]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+lto = true
+codegen-units = 1
+incremental = false
+
+# Documentation configuration
+[package.metadata.docs.rs]
+all-features = true
+default-target = "x86_64-unknown-linux-gnu"
+targets = ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc", "x86_64-apple-darwin"]
+
+# Cargo audit configuration
+[package.metadata.audit]
+ignore = []
+
+# Security policy
+[package.metadata.security]
+policy = "security-policy.md"
+disclosure = "security@bio-p2p.org"

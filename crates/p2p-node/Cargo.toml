@@ -1,0 +1,28 @@
+[package]
+name = "p2p-node"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "libp2p networking implementation for bio-p2p network"
+keywords = ["libp2p", "networking", "p2p", "biological"]
+
+[dependencies]
+core-protocol = { path = "../core-protocol" }
+libp2p.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+anyhow.workspace = true
+dashmap.workspace = true
+rand.workspace = true
+
+[dev-dependencies]
+tokio-test.workspace = true
+proptest.workspace = true
+
+[lints]
+workspace = true

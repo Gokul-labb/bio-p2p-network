@@ -1,0 +1,20 @@
+# Clippy linting configuration for security and code quality
+avoid-breaking-exported-api = false
+msrv = "1.70.0"
+warn-on-all-wildcard-imports = true
+allow-expect-in-tests = true
+allow-unwrap-in-tests = true
+allow-dbg-in-tests = true
+allow-print-in-tests = true
+too-many-arguments-threshold = 7
+type-complexity-threshold = 250
+single-char-binding-names-threshold = 4
+trivial-copy-size-threshold = 64
+pass-by-value-size-limit = 256
+too-many-lines-threshold = 100
+large-type-threshold = 200
+verbose-bit-mask-threshold = 1
+literal-representation-threshold = 10
+trivially-copy-pastes-size = 100
+enum-variant-size-threshold = 200
+stack-size-threshold = 512000
